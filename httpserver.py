@@ -1,29 +1,9 @@
 """
 Implements a simple HTTP/1.0 Server
+
 """
 
 import socket
-
-
-def handle_request(request):
-    """Handles the HTTP request."""
-
-    headers = request.split('\n')
-    filename = headers[0].split()[1]
-    if filename == '/':
-        filename = '/index.html'
-
-    try:
-        fin = open('htdocs' + filename)
-        content = fin.read()
-        fin.close()
-
-        response = 'HTTP/1.0 200 OK\n\n' + content
-    except FileNotFoundError:
-        response = 'HTTP/1.0 404 NOT FOUND\n\nFile Not Found'
-
-    return response
-
 
 # Define socket host and port
 SERVER_HOST = '0.0.0.0'
@@ -36,7 +16,7 @@ server_socket.bind((SERVER_HOST, SERVER_PORT))
 server_socket.listen(1)
 print('Listening on port %s ...' % SERVER_PORT)
 
-while True:
+while True:    
     # Wait for client connections
     client_connection, client_address = server_socket.accept()
 
@@ -44,11 +24,9 @@ while True:
     request = client_connection.recv(1024).decode()
     print(request)
 
-    # Return an HTTP response
-    response = handle_request(request)
+    # Send HTTP response
+    response = 'HTTP/1.0 200 OK\n\nHello World'
     client_connection.sendall(response.encode())
-
-    # Close connection
     client_connection.close()
 
 # Close socket
